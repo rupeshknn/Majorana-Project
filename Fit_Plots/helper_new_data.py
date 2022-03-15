@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 
 from scipy.constants import e, k, h
 from scipy.interpolate import interp1d
-
+# print('new chnages in 2')
 DELTA = 0.250*1e-3*e
 ROK_ENERGY_UNIT = (DELTA/0.166)
 
@@ -73,17 +73,17 @@ def initilize(nrg,exppp):
 
     def dataset_func(data_idx):
         data_idx = str(data_idx).zfill(2)
-        data = np.loadtxt(f"{EXPERIMENTAL_PATH}dataset_opening_{data_idx}.csv",
+        data = np.loadtxt(f"{EXPERIMENTAL_PATH}dataset_opening_parity_1_{data_idx}.csv",
                    skiprows = 1,
-                   delimiter = ',')[:, [0, 1, 5]]
+                   delimiter = ',')[:, [0, 1, 2]]
         return data[:,0:2], data[:,0:3:2]
 
     def experimental_data(data_idx,symmetrize): #filter
         c_data, r_data = dataset_func(data_idx)
 
         exp_c = c_data[:,1]
-        exp_g = 1/r_data[:,1]
-        exp_v = c_data[:,0]*1e3
+        exp_g = r_data[:,1]
+        exp_v = (c_data[:,0] - np.mean(c_data[:,0]))*1e3
 
         filter_bool = (exp_v < V_RANGE) * (-V_RANGE < exp_v)
 
@@ -159,6 +159,7 @@ def initilize(nrg,exppp):
         sym = 0
         local_parameters = parameters[np.array(data_sets)][:,np.array([1,2])]
         global_parameters = parameters[0,np.array([-4,-3,-2,-1])]
+        data_set_names = np.round(parameters[:,0],1)
 
         scale = 5
         collumns = len(data_sets)
@@ -168,7 +169,7 @@ def initilize(nrg,exppp):
         counter = 0
 
         for ((log_g0,gammat), dset,axis) in zip(local_parameters,data_sets,axes):
-
+            dset = data_set_names[dset]
             e_data = experimental_data(dset, sym)
             exp_v = e_data['exp_v']
             a_data = analytical_data(gammat, log_g0, global_parameters, exp_v, fit_step = 2)

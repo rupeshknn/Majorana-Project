@@ -5,9 +5,8 @@ import matplotlib.pyplot as plt
 from scipy.constants import e, k, h
 from scipy.interpolate import interp1d
 
-DELTA = 0.250*1e-3*e
-ROK_ENERGY_UNIT = (DELTA/0.166)
-
+ROK_ENERGY_UNIT = 1e-3*e
+DELTA = 0.166*1e-3*e
 V_RANGE = 0.605
 FREQUENCY = 2*np.pi*368*1e6
 LABEL_DICT = {'mini_gap':r'Shiba mini-gap, $\delta / \Delta $',
@@ -99,11 +98,9 @@ def initilize(nrg,exppp):
 
     def analytical_data(gamma, log_g0, global_parameters, v0,fit_step):
         u, alpha, temp, log_n = global_parameters
-        
-        v0 = v0*alpha
-        normunit = ROK_ENERGY_UNIT*1e3/e
-        nu = (1 - v0/(u*normunit))
 
+        v0 = v0*alpha
+        nu = (1 - v0/u)
         n = 10**log_n
         g0 = 10**log_g0
         if log_g0 == 0.0: g0 = 0.0
@@ -196,7 +193,7 @@ def initilize(nrg,exppp):
         u, alpha, temp, log_n = global_parameters
         parameter_string = f"$T = {temp*1000:.3f} mK $\
                 $\\alpha        = {alpha:.3f} $\
-                $U       = {u:.3f} * 1.506 meV $\
+                $U       = {u:.3f} meV $\
                 $log_{{10}} N   = {log_n:.3f}$"
 
         fig.text(
