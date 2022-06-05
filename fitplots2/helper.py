@@ -97,7 +97,7 @@ def initilize(nrg,exppp):
 
         return {'exp_v':exp_v, 'exp_c':exp_c, 'exp_g':exp_g}
 
-    def analytical_data(gamma, log_g0, global_parameters, v0,fit_step):
+    def analytical_data(gamma, log_g0, global_parameters, v0):
         u, alpha, temp, log_n = global_parameters
         
         v0 = v0*alpha
